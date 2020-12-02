@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { shade } from 'polished';
 
@@ -70,7 +71,7 @@ export const RepositoryList = styled.div`
   max-width: 715px;
 `;
 
-export const RepositoryItem = styled.a`
+export const RepositoryItem = styled(Link)`
   background-color: #fff;
   border-radius: 5px;
   width: 100%;
