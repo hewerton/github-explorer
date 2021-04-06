@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { shade } from 'polished';
 
+import media from '../../styles/media';
+
 interface FormProps {
   hasError: boolean;
 }
@@ -21,34 +23,41 @@ export const Title = styled.h1`
 export const Form = styled.form<FormProps>`
   margin-top: 40px;
   max-width: 715px;
-
   display: flex;
+  flex-direction: column;
+
+  ${media.tablet`
+    flex-direction: row;
+  `}
+
+  ${media.desktop`
+    flex-direction: row;
+  `}
 
   input {
-    flex: 1;
-    height: 70px;
+    line-height: 66px;
     padding: 0 24px;
     border: 0;
-    border-radius: 5px 0px 0px 5px;
+    border-radius: 5px 5px 0px 0px;
     border: 2px solid #fff;
     border-right: 0;
+
+    &::placeholder {
+      color: #a8a8b3;
+    }
 
     ${props =>
       props.hasError &&
       css`
         border-color: #c53030;
       `}
-
-    &::placeholder {
-      color: #a8a8b3;
-    }
   }
 
   button {
-    width: 210px;
+    width: 100%;
     height: 70px;
     background-color: #04d361;
-    border-radius: 0px 5px 5px 0px;
+    border-radius: 0px 0px 5px 5px;
     border: 0;
     color: #fff;
     font-weight: bold;

@@ -1,18 +1,85 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 import logo from '../../assets/github_explorer_logo.svg';
 import * as S from './styles';
+import api from '../../services/api';
 
 interface RepositoryParams {
   repository: string;
+}
+
+interface RepositoryDetails {
+  full_name: string;
+  description: string;
+  stargazers_count: number;
+  forks_count: number;
+  open_issues_count: number;
+  owner: {
+    avatar_url: string;
+    login: string;
+  };
+}
+
+interface IssueDetails {
+  id: number;
+  url: string;
+  title: string;
+  user: {
+    login: string;
+  };
 }
 
 const Repository: React.FC = () => {
   const {
     params: { repository },
   } = useRouteMatch<RepositoryParams>();
+
+  const [repoDetails, setRepoDetails] = useState<RepositoryDetails>(() => {
+    const storagedRepos = localStorage.getItem('@GithubExplorer:repositories');
+
+    if (storagedRepos) {
+      const repos: RepositoryDetails[] = JSON.parse(storagedRepos);
+      const foundRepo = repos.filter(repo => repo.full_name === repository);
+
+      if (foundRepo.length) {
+        return foundRepo[0];
+      }
+    }
+
+    return {} as RepositoryDetails;
+  });
+
+  const [repoError, setRepoError] = useState(false);
+
+  const [issuesDetails, setIssuesDetails] = useState<IssueDetails[]>([]);
+
+  useEffect(() => {
+    async function getRepoDetails(): Promise<void> {
+      try {
+        if (!repoDetails) {
+          const resRepoDetails = await api.get<RepositoryDetails>(
+            `repos/${repository}`,
+          );
+
+          setRepoDetails(resRepoDetails.data);
+        }
+
+        const resIssuesDetails = await api.get<IssueDetails[]>(
+          `repos/${repository}/issues`,
+        );
+
+        setRepoError(false);
+        setIssuesDetails(resIssuesDetails.data);
+      } catch (e) {
+        setRepoError(true);
+      }
+    }
+
+    getRepoDetails();
+  }, [repoDetails, repository]);
+
   return (
     <>
       <S.Header>
@@ -22,41 +89,46 @@ const Repository: React.FC = () => {
           Voltar
         </Link>
       </S.Header>
-      <S.RepositoryDetails>
-        <S.RepositoryInfo>
-          <img
-            src="https://avatars3.githubusercontent.com/u/29063458?s=460&u=c03b921843b147fe9d3ef6bb95da512aa4d74d75&v=4"
-            alt="Lidani"
-          />
-          <div>
-            <strong>tiagolouchtenberg/repo</strong>
-            <p>Descrição do repo</p>
-          </div>
-        </S.RepositoryInfo>
+      {!repoError && (
+        <S.RepositoryDetails>
+          <S.RepositoryInfo>
+            <img
+              src={repoDetails.owner.avatar_url}
+              alt={repoDetails.owner.login}
+            />
+            <div>
+              <strong>{repoDetails.full_name}</strong>
+              <p>{repoDetails.description}</p>
+            </div>
+          </S.RepositoryInfo>
 
-        <S.RepositoryNumbers>
-          <li>
-            <strong>1808</strong>
-            <span>Stars</span>
-          </li>
-          <li>
-            <strong>48</strong>
-            <span>Forks</span>
-          </li>
-          <li>
-            <strong>67</strong>
-            <span>Issues abertas</span>
-          </li>
-        </S.RepositoryNumbers>
-      </S.RepositoryDetails>
+          <S.RepositoryNumbers>
+            <li>
+              <strong>{repoDetails.stargazers_count}</strong>
+              <span>Stars</span>
+            </li>
+            <li>
+              <strong>{repoDetails.forks_count}</strong>
+              <span>Forks</span>
+            </li>
+            <li>
+              <strong>{repoDetails.open_issues_count}</strong>
+              <span>Issues abertas</span>
+            </li>
+          </S.RepositoryNumbers>
+        </S.RepositoryDetails>
+      )}
       <S.IssueList>
-        <S.IssueItem to="">
-          <div>
-            <strong>asdfasdfadfs</strong>
-            <p>asdfasdfasdasdf</p>
-          </div>
-          <FiChevronRight />
-        </S.IssueItem>
+        {!repoError &&
+          issuesDetails.map(issue => (
+            <S.IssueItem key={issue.id} to={issue.url}>
+              <div>
+                <strong>{issue.title}</strong>
+                <p>{issue.user.login}</p>
+              </div>
+              <FiChevronRight />
+            </S.IssueItem>
+          ))}
         <S.IssueItem to="">
           <div>
             <strong>asdfasdfadfs</strong>
