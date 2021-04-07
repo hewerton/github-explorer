@@ -12,7 +12,7 @@ export const Title = styled.h1`
   font-size: 48px;
   color: #3a3a3a;
 
-  margin-top: 80px;
+  margin-top: 40px;
   max-width: 450px;
   font-style: normal;
   font-weight: bold;
@@ -22,15 +22,10 @@ export const Title = styled.h1`
 
 export const Form = styled.form<FormProps>`
   margin-top: 40px;
-  max-width: 715px;
   display: flex;
   flex-direction: column;
 
   ${media.tablet`
-    flex-direction: row;
-  `}
-
-  ${media.desktop`
     flex-direction: row;
   `}
 
@@ -40,17 +35,31 @@ export const Form = styled.form<FormProps>`
     border: 0;
     border-radius: 5px 5px 0px 0px;
     border: 2px solid #fff;
-    border-right: 0;
+    border-bottom: none;
+    font-size: 16px;
 
     &::placeholder {
       color: #a8a8b3;
     }
+
+    ${media.tablet`
+      flex: 1;
+      border-radius: 5px 0px 0px 5px;
+      border-right: 0;
+      border-bottom: 2px solid #fff;
+    `}
 
     ${props =>
       props.hasError &&
       css`
         border-color: #c53030;
       `}
+
+    ${props =>
+      props.hasError &&
+      media.tablet`
+        border-color: #c53030;
+    `}
   }
 
   button {
@@ -61,11 +70,17 @@ export const Form = styled.form<FormProps>`
     border: 0;
     color: #fff;
     font-weight: bold;
+    font-size: 16px;
     transition: background-color 0.2s;
 
     &:hover {
       background-color: ${shade(0.2, '#04d361')};
     }
+
+    ${media.tablet`
+      width: 210px;
+      border-radius: 0px 5px 5px 0px;
+    `}
   }
 `;
 

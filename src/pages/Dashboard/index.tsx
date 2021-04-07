@@ -44,7 +44,7 @@ const Dashboard: React.FC = () => {
     setInputError('');
 
     if (!newRepo) {
-      setInputError('Digete o autor/nome do repositório');
+      setInputError('Type the name like this pattern: author/name');
       return;
     }
 
@@ -56,19 +56,19 @@ const Dashboard: React.FC = () => {
 
       setNewRepo('');
     } catch (error) {
-      setInputError('Erro na busca por esse repositório');
+      setInputError('A error ocurred!');
     }
   }
 
   return (
     <>
       <img src={logoImg} alt="Github Explorer" />
-      <S.Title>Explore repositórios no GitHub.</S.Title>
+      <S.Title>Explore repositories from GitHub.</S.Title>
 
       <S.Form hasError={!!inputError} onSubmit={handleAddRepository}>
         <input
           type="text"
-          placeholder="Digite o nome do repositório"
+          placeholder="Type the repository's name"
           value={newRepo}
           onChange={e => setNewRepo(e.target.value)}
         />
