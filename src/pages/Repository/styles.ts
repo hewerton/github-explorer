@@ -36,7 +36,6 @@ export const RepositoryDetails = styled.section`
 export const RepositoryInfo = styled.header`
   display: flex;
   align-items: center;
-  justify-content: center;
 
   flex-direction: column;
 

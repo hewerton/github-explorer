@@ -120,6 +120,11 @@ export const RepositoryItem = styled(Link)`
     width: 64px;
     height: 64px;
     border-radius: 50%;
+    display: none;
+
+    ${media.tablet`
+      display: inline;
+    `}
   }
 
   div {
