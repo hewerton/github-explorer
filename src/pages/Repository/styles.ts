@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import media from '../../styles/media';
 
 export const Header = styled.header`
   display: flex;
@@ -20,26 +20,45 @@ export const Header = styled.header`
 
     svg {
       margin-right: 8px;
+      display: none;
+
+      ${media.tablet`
+        display: inline;
+      `}
     }
   }
 `;
 
 export const RepositoryDetails = styled.section`
-  margin-top: 80px;
+  margin-top: 40px;
 `;
 
 export const RepositoryInfo = styled.header`
   display: flex;
   align-items: center;
+  justify-content: center;
+
+  flex-direction: column;
+
+  ${media.tablet`
+    flex-direction: row;
+  `}
 
   img {
     width: 120px;
     height: 120px;
     border-radius: 50%;
+    margin-bottom: 16px;
+
+    ${media.tablet`
+      margin-bottom: 0px;
+    `}
   }
 
   div {
-    margin-left: 24px;
+    ${media.tablet`
+      margin-left: 24px;
+    `}
 
     strong {
       line-height: 42px;
@@ -55,29 +74,33 @@ export const RepositoryInfo = styled.header`
       color: #737380;
     }
   }
-
-  ul {
-    display: flex;
-    margin-top: 40px;
-
-    strong {
-      display: block;
-    }
-
-    span {
-      display: block;
-    }
-  }
 `;
 
 export const RepositoryNumbers = styled.ul`
   list-style: none;
   display: flex;
-  margin-top: 40px;
+  margin-top: 20px;
+  flex-direction: column;
+  align-items: center;
+
+  ${media.tablet`
+    flex-direction: row;
+  `}
 
   li {
+    text-align: center;
+
+    ${media.tablet`
+      text-align: left;
+    `}
+
     & + li {
-      margin-left: 80px;
+      margin-top: 20px;
+
+      ${media.tablet`
+        margin-top: 0px;
+        margin-left: 80px;
+      `}
     }
     strong {
       display: block;
@@ -96,11 +119,11 @@ export const RepositoryNumbers = styled.ul`
 `;
 
 export const IssueList = styled.div`
-  margin-top: 80px;
+  margin-top: 40px;
   max-width: 715px;
 `;
 
-export const IssueItem = styled(Link)`
+export const IssueItem = styled.a`
   background-color: #fff;
   border-radius: 5px;
   width: 100%;

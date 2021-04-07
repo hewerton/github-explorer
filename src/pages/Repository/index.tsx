@@ -24,7 +24,7 @@ interface RepositoryDetails {
 
 interface IssueDetails {
   id: number;
-  url: string;
+  html_url: string;
   title: string;
   user: {
     login: string;
@@ -51,14 +51,14 @@ const Repository: React.FC = () => {
     return {} as RepositoryDetails;
   });
 
-  const [repoError, setRepoError] = useState(false);
+  const [repoError, setRepoError] = useState(true);
 
   const [issuesDetails, setIssuesDetails] = useState<IssueDetails[]>([]);
 
   useEffect(() => {
     async function getRepoDetails(): Promise<void> {
       try {
-        if (!repoDetails) {
+        if (!repoDetails.full_name) {
           const resRepoDetails = await api.get<RepositoryDetails>(
             `repos/${repository}`,
           );
@@ -121,7 +121,7 @@ const Repository: React.FC = () => {
       <S.IssueList>
         {!repoError &&
           issuesDetails.map(issue => (
-            <S.IssueItem key={issue.id} to={issue.url}>
+            <S.IssueItem key={issue.id} href={issue.html_url} target="blank">
               <div>
                 <strong>{issue.title}</strong>
                 <p>{issue.user.login}</p>
@@ -129,20 +129,6 @@ const Repository: React.FC = () => {
               <FiChevronRight />
             </S.IssueItem>
           ))}
-        <S.IssueItem to="">
-          <div>
-            <strong>asdfasdfadfs</strong>
-            <p>asdfasdfasdasdf</p>
-          </div>
-          <FiChevronRight />
-        </S.IssueItem>
-        <S.IssueItem to="">
-          <div>
-            <strong>asdfasdfadfs</strong>
-            <p>asdfasdfasdasdf</p>
-          </div>
-          <FiChevronRight />
-        </S.IssueItem>
       </S.IssueList>
     </>
   );
